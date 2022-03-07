@@ -1,0 +1,27 @@
+{
+  "name": "cookbook",
+  "version": "1.0.0",
+  "description": "CSE 341 Team 7 Final Project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tw113/team7-final.git"
+  },
+  "author": "Tanner Wilson, Anna Astle, Amber Gneiting, Lauren Warren, Santiago Enriquez Benavides, Christine Helfrich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tw113/team7-final/issues"
+  },
+  "homepage": "https://github.com/tw113/team7-final#readme",
+  "dependencies": {
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
