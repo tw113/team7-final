@@ -1,14 +1,4 @@
 #Auth Endpoints
-PUT http://localhost:8080/signup HTTP/1.1
-Content-Type: application/json
-
-{
-   "name": "Bruce Wayne",
-   "email": "theBatman@test.com",
-   "password": "bestSuperNum1"
-}
-###
-
 POST http://locahost:8080/login HTTP/1.1
 Content-Type: application/json
 
@@ -17,25 +7,20 @@ Content-Type: application/json
    "password": "bestSuperNum1"
 }
 
+###
+
+PUT http://localhost:8080/signup HTTP/1.1
+Content-Type: application/json
+
+{
+   "name": "Bruce Wayne",
+   "email": "theBatman@test.com",
+   "password": "bestSuperNum1"
+}
+
+###
+
 #Recipe Endpoints
-//Returns all json recipe data
-GET http://localhost:8080/recipes HTTP/1.1
-Content-Type: application/json
-
-###
-
-//Returns json data for a specific recipe
-//add recipeId in bellow http to test
-GET http://localhost:8080/recipe/:[recipeId] HTTP/1.1
-Content-Type: application/json
-
-###
-
-PUT http://localhost:8080/:[recipeId] HTTP/1.1
-Content-Type: application/json
-
-###
-
 POST http://localhost:8080/recipe HTTP/1.1
 Content-Type: application/json
 
@@ -66,3 +51,27 @@ Content-Type: application/json
 }
 
 ###
+
+PUT http://localhost:8080/:[recipeId] HTTP/1.1
+Content-Type: application/json
+
+###
+
+DELETE http://localhost:8080/:[recipeId] HTTP/1.1
+Content-Type: application/json
+
+###
+
+//Returns all json recipe data
+GET http://localhost:8080/recipes HTTP/1.1
+Content-Type: application/json
+
+###
+
+//Returns json data for a specific recipe
+//add recipeId in bellow http to test
+GET http://localhost:8080/recipe/:[recipeId] HTTP/1.1
+Content-Type: application/json
+
+###
+
