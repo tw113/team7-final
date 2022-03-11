@@ -52,12 +52,12 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/:[recipeId] HTTP/1.1
+PUT http://localhost:8080/recipes/:[recipeId] HTTP/1.1
 Content-Type: application/json
 
 ###
 
-DELETE http://localhost:8080/:[recipeId] HTTP/1.1
+DELETE http://localhost:8080/recipes/:[recipeId] HTTP/1.1
 Content-Type: application/json
 
 ###
@@ -70,7 +70,7 @@ Content-Type: application/json
 
 //Returns json data for a specific recipe
 //add recipeId in bellow http to test
-GET http://localhost:8080/recipe/:[recipeId] HTTP/1.1
+GET http://localhost:8080/recipes/:[recipeId] HTTP/1.1
 Content-Type: application/json
 
 ###
