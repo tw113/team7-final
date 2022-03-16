@@ -13,9 +13,10 @@ PUT http://localhost:8080/signup HTTP/1.1
 Content-Type: application/json
 
 {
-   "name": "Bruce Wayne",
+   "firstName": "Bruce",
+   "lastName": "Wayne",
    "email": "theBatman@test.com",
-   "password": "bestSuperNum1"
+   "password": "bestSuperNum1",
 }
 
 ###
@@ -26,38 +27,32 @@ Content-Type: application/json
 
 {
    "title": "This is from test.http",
-   "userId": 2,//Add existing Id,
+   "userId": "62316881efcc971eb862e952",//Add existing Id,
    "description": "Vegetable Soup",
    "imageUrl" : "dummy-image.jpg",
-   "ingredients": [
-      {
-         "name": "Onion",
-         "quantity": 1
-      }, 
-      {
-         "name": "Garlic Cloves",
-         "quantity": 3
-      },
-      {
-         "name": "Canned Diced Tomatoes",
-         "quantity": 1
-      },
-      {
-         "name": "Canned Chicken Stock",
-         "quantity": 1
-      }
-   ], 
+   //MODIFIED: Ingredients is now a String instead of list of objects
+   "ingredients": "1 Onion\n3 Garlic Cloves\n1 Can Diced Tomatoes\n1 Can Chicken Stock", 
    "instructions": "Put all ingredients in a pot. Simmer for 20 mins"
 }
 
 ###
 
-PUT http://localhost:8080/recipes/:[recipeId] HTTP/1.1
+PUT http://localhost:8080/recipes/[recipeId] HTTP/1.1
 Content-Type: application/json
+
+{
+   "title": "This is from test.http",
+   "userId": "62316881efcc971eb862e952",//Add existing Id,
+   "description": "Vegetable Soup",
+   "imageUrl" : "dummy-image.jpg",
+   //MODIFIED: Ingredients is now a String instead of list of objects
+   "ingredients": "1 Onion\n3 Garlic Cloves\n1 Can Diced Tomatoes\n1 Can Chicken Stock", 
+   "instructions": "These are the Edited Instructions"
+}
 
 ###
 
-DELETE http://localhost:8080/recipes/:[recipeId] HTTP/1.1
+DELETE http://localhost:8080/recipes/[recipeId] HTTP/1.1
 Content-Type: application/json
 
 ###
@@ -70,7 +65,7 @@ Content-Type: application/json
 
 //Returns json data for a specific recipe
 //add recipeId in bellow http to test
-GET http://localhost:8080/recipes/:[recipeId] HTTP/1.1
+GET http://localhost:8080/recipes/[recipeId] HTTP/1.1
 Content-Type: application/json
 
 ###
