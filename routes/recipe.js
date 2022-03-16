@@ -8,6 +8,7 @@ router.get("/recipes", recipeController.getRecipes);
 
 router.get("/recipes/:recipeId", recipeController.getRecipe);
 
-router.post("/recipes", recipeController.postRecipe);
+//My preference= "recipe" over "recipes" since it is only posting 1 recipe
+router.post("/recipe", recipeController.postRecipe); // MODIFIED router.post("/recipes", recipeController.postRecipe);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 // Controller for Recipes
 const mongoose = require("mongoose");
 
-const validationResult = require("express-validator/check");
+// const validationResult = require("express-validator/check"); // MODIFIED - commented out -> not using yet
 
 const Recipe = require("../models/recipe");
 
@@ -50,29 +50,35 @@ exports.postRecipe = (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
-  const name = req.body.ingredients.name;
-  const quantity = req.body.ingredients.quantity;
+  // const { name, quantity} = req.body.ingredients;
+  const ingredients = req.body.ingredients; //MODIFIED: Ingredients is now a String instead of list of objects
   const instructions = req.body.instructions;
 
   const recipe = new Recipe({
     title: title,
     description: description,
     imageUrl: imageUrl,
-    userId: req.user.userId,
-    ingredients: {
-      name: name,
-      quantity: quantity,
-    },
+    userId: mongoose.Types.ObjectId("62316881efcc971eb862e952"), //MODIFIED : temporarily hardcoded
+    // ingredients: {
+    //   name: name,
+    //   quantity: quantity,
+    // },
+    ingredients: ingredients, //MODIFIED: Ingredients is now a String instead of list of objects
+
     instructions: instructions,
   });
-  product
+
+  recipe //MODIFIED "product" to "recipe"
     .save()
     .then((result) => {
       console.log("Created Recipe");
+      res.status(201).json({ message: "Recipe Added Successfully" }); // MODIFIED / ADDED
     })
     .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
     });
+
+  //TODO: recipe should also be pushed to user recipe list
 };
