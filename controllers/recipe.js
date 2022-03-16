@@ -45,4 +45,34 @@ exports.getRecipe = (req, res, next) => {
     });
 };
 
-exports.postAddRecipe = (req, res, next) => {};
+//Creates recipe
+exports.postRecipe = (req, res, next) => {
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const description = req.body.description;
+  const name = req.body.ingredients.name;
+  const quantity = req.body.ingredients.quantity;
+  const instructions = req.body.instructions;
+  
+  const recipe = new Recipe({
+    title: title,
+    description: description,
+    imageUrl: imageUrl,
+    userId: req.user.userId,
+    ingredients: {
+      name: name,
+      quantity: quantity
+    },
+    instructions: instructions
+  });
+  product
+    .save()
+    .then(result => {
+      console.log('Created Recipe');
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};

@@ -8,4 +8,6 @@ router.get("/recipes", recipeController.getRecipes);
 
 router.get("/recipes/:recipeId", recipeController.getRecipe);
 
+router.post("/recipes", recipeController.postRecipe);
+
 module.exports = router;
