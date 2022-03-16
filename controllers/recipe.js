@@ -9,7 +9,7 @@ const Recipe = require("../models/recipe");
 exports.getRecipes = (req, res, next) => {
   Recipe.find()
     .then((recipes) => {
-      res.status.json({
+      res.status(200).json({
         message: "Fetched Recipes",
         recipes: recipes,
       });
@@ -53,7 +53,7 @@ exports.postRecipe = (req, res, next) => {
   const name = req.body.ingredients.name;
   const quantity = req.body.ingredients.quantity;
   const instructions = req.body.instructions;
-  
+
   const recipe = new Recipe({
     title: title,
     description: description,
@@ -61,16 +61,16 @@ exports.postRecipe = (req, res, next) => {
     userId: req.user.userId,
     ingredients: {
       name: name,
-      quantity: quantity
+      quantity: quantity,
     },
-    instructions: instructions
+    instructions: instructions,
   });
   product
     .save()
-    .then(result => {
-      console.log('Created Recipe');
+    .then((result) => {
+      console.log("Created Recipe");
     })
-    .catch(err => {
+    .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
