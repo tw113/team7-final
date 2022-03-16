@@ -6,8 +6,8 @@ const userController = require("../controllers/user");
 
 const router = express.Router();
 
-router.post("/user", userController.postSignUp);
+router.post("/signup", userController.postSignup); // MODIFIED router.post("/user", userController.postSignUp);
 
-router.post("/user", userController.postUser);
+// MODIFIED / DELETED router.post("/user", userController.postUser);
 
 module.exports = router;
