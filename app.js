@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 const recipeRoutes = require("./routes/recipe");
+const userRoutes = require("./routes/user"); // MODIFIED / ADDED
 
 app.use(bodyParser.json()); // application/json content
 
@@ -19,6 +20,7 @@ app.get("/", (res, req, next) => {
   req.json({ test: "test" });
 });
 
+app.use(userRoutes); // MODIFIED / ADDED
 app.use(recipeRoutes);
 
 mongoose
