@@ -1,4 +1,5 @@
 const express = require("express");
+const isAuth = require("../middleware/isAuth");
 
 const recipeController = require("../controllers/recipe");
 
@@ -8,7 +9,6 @@ router.get("/recipes", recipeController.getRecipes);
 
 router.get("/recipes/:recipeId", recipeController.getRecipe);
 
-//My preference= "recipe" over "recipes" since it is only posting 1 recipe
-router.post("/recipe", recipeController.postRecipe); // MODIFIED router.post("/recipes", recipeController.postRecipe);
+router.post("/recipe", /*isAuth,*/ recipeController.postRecipe); // MODIFIED router.post("/recipes", recipeController.postRecipe);
 
 module.exports = router;

@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 // const validationResult = require("express-validator/check"); // MODIFIED - commented out -> not using yet
 
 const Recipe = require("../models/recipe");
+const User = require("../models/user");
 
 //Returns a list of recipe objects
 exports.getRecipes = (req, res, next) => {
@@ -46,7 +47,7 @@ exports.getRecipe = (req, res, next) => {
 };
 
 //Creates recipe
-exports.postRecipe = (req, res, next) => {
+exports.postRecipe = async (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
@@ -54,25 +55,38 @@ exports.postRecipe = (req, res, next) => {
   const ingredients = req.body.ingredients; //MODIFIED: Ingredients is now a String instead of list of objects
   const instructions = req.body.instructions;
 
+  const userId = /* req.userId*/ mongoose.Types.ObjectId(
+    "62316881efcc971eb862e952"
+  );
+
+  //Get user so added recipeId can also be added to logged in user recipe list
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new Error("User not found.");
+    error.statusCode(404);
+    throw error;
+  }
+
   const recipe = new Recipe({
     title: title,
     description: description,
     imageUrl: imageUrl,
-    userId: mongoose.Types.ObjectId("62316881efcc971eb862e952"), //MODIFIED : temporarily hardcoded
-    // ingredients: {
-    //   name: name,
-    //   quantity: quantity,
-    // },
+    userId: userId, //MODIFIED : temporarily hardcoded
     ingredients: ingredients, //MODIFIED: Ingredients is now a String instead of list of objects
 
     instructions: instructions,
   });
 
-  recipe //MODIFIED "product" to "recipe"
+  recipe
     .save()
     .then((result) => {
       console.log("Created Recipe");
-      res.status(201).json({ message: "Recipe Added Successfully" }); // MODIFIED / ADDED
+      res.status(201).json({ message: "Recipe Added Successfully" });
+      user.recipes.push({ recipeId: result._id });
+      return user.save();
+    })
+    .then((result) => {
+      console.log("Added recipe to User recipe list");
     })
     .catch((err) => {
       const error = new Error(err);
@@ -80,5 +94,5 @@ exports.postRecipe = (req, res, next) => {
       return next(error);
     });
 
-  //TODO: recipe should also be pushed to user recipe list
+  //Add user to recipe list
 };
