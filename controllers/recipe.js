@@ -1,5 +1,7 @@
 // Controller for Recipes
+const { Router } = require("express");
 const mongoose = require("mongoose");
+module.exports = router;
 
 // const validationResult = require("express-validator/check"); // MODIFIED - commented out -> not using yet
 
@@ -82,3 +84,25 @@ exports.postRecipe = (req, res, next) => {
 
   //TODO: recipe should also be pushed to user recipe list
 };
+
+router.put("/:id", async(req, res) =>{
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const description = req.body.description;
+  // const { name, quantity} = req.body.ingredients;
+  const ingredients = req.body.ingredients; //MODIFIED: Ingredients is now a String instead of list of objects
+  const instructions = req.body.instructions;
+
+  const recipe = new Recipe({
+    title: title,
+    description: description,
+    imageUrl: imageUrl,
+    userId: mongoose.Types.ObjectId("62316881efcc971eb862e952"), //MODIFIED : temporarily hardcoded
+    // ingredients: {
+    //   name: name,
+    //   quantity: quantity,
+    // },
+    ingredients: ingredients, //MODIFIED: Ingredients is now a String instead of list of objects
+    instructions: instructions,
+});
+});
