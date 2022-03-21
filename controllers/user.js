@@ -31,9 +31,6 @@ exports.postSignup = (req, res, next) => {
       return user.save();
     })
     .then((result) => {
-      // MODIFIED / DELETED - I don't know if we are redirecting since we aren't using views
-      // res.redirect("/login");
-
       res.status(201).json({ message: "User Added Successfully." }); // MODIFIED / ADDED
     })
     .catch((err) => {
