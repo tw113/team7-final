@@ -120,3 +120,18 @@ router.put("/:id", async(req, res) =>{
     instructions: instructions,
 });
 });
+
+//Deletes a recipe
+exports.deleteRecipe = (req, res, next) => {
+  const recipeId = req.params.recipeId;
+  Recipe.deleteOne(recipeId)
+    .then(() => {
+        console.log('DESTROYED RECIPE');
+        res.redirect('/recipes');
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
