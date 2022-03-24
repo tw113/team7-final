@@ -25,7 +25,7 @@ app.use(recipeRoutes);
 
 mongoose
   .connect(
-    "mongodb+srv://Cookbook:TEAM7CSE341@cookbookcluster.cikzo.mongodb.net/CookBookCluster?retryWrites=true&w=majority"
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cookbookcluster.cikzo.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
   )
   .then((result) => {
     app.listen(8080);
