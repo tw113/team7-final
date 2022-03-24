@@ -123,7 +123,7 @@
           "name": "recipeId",
           "in": "path",
           "required": true,
-          "description": "ID of user that we want to find",
+          "description": "ID of targeted recipe",
           "type": "string"
         }
       ],
