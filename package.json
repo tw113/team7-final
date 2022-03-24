@@ -4,8 +4,9 @@
   "description": "CSE 341 Team 7 Final Project",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "nodemon app.js"
+    "start": "MONGO_USER=Cookbook MONGO_PASSWORD=TEAM7CSE341 MONGO_DATABASE=CookBookCluster node app.js",
+    "test": "nodemon app.js",
+    "start:dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
