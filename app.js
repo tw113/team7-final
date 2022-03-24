@@ -1,3 +1,6 @@
+const swaggerUi = require("swagger-ui-express"),
+  swaggerDocument = require("./swagger.json");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -28,6 +31,7 @@ mongoose
     `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cookbookcluster.cikzo.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`
   )
   .then((result) => {
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     app.listen(8080);
   })
 
