@@ -1,0 +1,291 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an application which will allow users to add, modify, and delete recipes from their account.",
+    "version": "1.0.0",
+    "title": "The CookBook"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "schemes": ["http"],
+  "security": [
+    {
+      "application": ["read", "write"]
+    }
+  ],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/user/register": {
+      "post": {
+        "summary": "Add user to User database",
+        "tags": ["Users"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User we want to create.",
+            "schema": {
+              "$ref": "#definitions/NewUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supnplied"
+          },
+          "404": {
+            "description": "Recipe not found"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "summary": "Log in a user if username and password match a user in the User database",
+        "tags": ["Users"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User Login information",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully Logged In",
+            "schema": {
+              "$ref": "#definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid user information"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/recipes": {
+      "get": {
+        "tags": ["Recipes"],
+        "summary": "Gets all recipes in Recipe database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Recipes"
+            }
+          }
+        }
+      }
+    },
+    "/recipe": {
+      "post": {
+        "tags": ["Recipes"],
+        "summary": "Add new recipe to the Recipe database",
+        "parameters": [
+          {
+            "name": "recipe",
+            "in": "body",
+            "description": "Recipe that we want to create",
+            "schema": {
+              "$ref": "#definitions/Recipe"
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "New recipe is created",
+            "schema": {
+              "#ref": "#definitions/Recipe"
+            }
+          }
+        }
+      }
+    },
+    "/recipe/{recipeId}": {
+      "parameters": [
+        {
+          "name": "recipeId",
+          "in": "path",
+          "required": true,
+          "description": "ID of user that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "summary": "Use recipe id to find recipe in the Recipe database",
+        "tags": ["Recipes"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#definitions/Recipe"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Use recipe id to update recipe in User database",
+        "tags": ["Recipes"],
+        "parameters": [
+          {
+            "name": "recipe",
+            "in": "body",
+            "description": "Recipe with new values",
+            "schema": {
+              "$ref": "#definitions/RecipeUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Recipe is updated"
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Recipe not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete recipe by ID from Recipe database and from user's recipe list in the User database",
+        "tags": ["Recipes"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Recipe is deleted",
+            "schema": {
+              "$ref": "#definitions/Recipe"
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Recipe not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Recipe": {
+      "required": [
+        "title",
+        "userId",
+        "description",
+        "imageUrl",
+        "ingredients",
+        "instructions"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "ingredients": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        }
+      }
+    },
+    "Recipes": {
+      "type": "array",
+      "$ref": "#definitions/Recipe"
+    },
+    "RecipeUpdate": {
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": "string"
+        },
+        "ingredients": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        }
+      }
+    },
+    "NewUser": {
+      "required": ["firstName", "lastName", "email", "password"],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "required": ["firstName", "lastName", "email", "password", "recipes"],
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "recipes": {
+          "$ref": "#definitions/Recipes"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "application": {
+      "type": "oauth2",
+      "tokenUrl": "http://example.com/oauth/token",
+      "flow": "application",
+      "scopes": {
+        "write": "allows modifying resources",
+        "read": "allows reading resources"
+      }
+    }
+  }
+}
