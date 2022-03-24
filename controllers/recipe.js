@@ -98,14 +98,35 @@ exports.postRecipe = async (req, res, next) => {
   //Add user to recipe list
 };
 
+exports.putEditRecipe = async (req, res) => {
+  const title = req.body.title;
+  const imageUrl = req.body.imageUrl;
+  const description = req.body.description;
+  // const { name, quantity} = req.body.ingredients;
+  const ingredients = req.body.ingredients; //MODIFIED: Ingredients is now a String instead of list of objects
+  const instructions = req.body.instructions;
+
+  const recipe = new Recipe({
+    title: title,
+    description: description,
+    imageUrl: imageUrl,
+    userId: mongoose.Types.ObjectId("62316881efcc971eb862e952"), //MODIFIED : temporarily hardcoded
+    // ingredients: {
+    //   name: name,
+    //   quantity: quantity,
+    // },
+    ingredients: ingredients, //MODIFIED: Ingredients is now a String instead of list of objects
+    instructions: instructions,
+  });
+};
 
 //Deletes a recipe
 exports.deleteRecipe = (req, res, next) => {
   const recipeId = req.params.recipeId;
   Recipe.deleteOne(recipeId)
     .then(() => {
-        console.log('DESTROYED RECIPE');
-        res.redirect('/recipes');
+      console.log("DESTROYED RECIPE");
+      res.redirect("/recipes");
     })
     .catch((err) => {
       const error = new Error(err);
