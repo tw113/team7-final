@@ -58,7 +58,7 @@
             "in": "body",
             "description": "User Login information",
             "schema": {
-              "$ref": "#definitions/User"
+              "$ref": "#definitions/LoginUser"
             }
           }
         ],
@@ -72,7 +72,7 @@
           "400": {
             "description": "Invalid user information"
           },
-          "404": {
+          "401": {
             "description": "User not found"
           }
         }
@@ -273,6 +273,17 @@
         },
         "recipes": {
           "$ref": "#definitions/Recipes"
+        }
+      }
+    },
+    "LoginUser": {
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
         }
       }
     }

@@ -1,10 +1,10 @@
 // Controller for Users
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt"); //MODIFIED / ADDED -> make sure to npm install --save bcrypt
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt'); //MODIFIED / ADDED -> make sure to npm install --save bcrypt
 
 // const validationResult = require("express-validator"); // MODIFIED - commented out -> not using yet
 
-const User = require("../models/user");
+const User = require('../models/user');
 
 exports.postSignup = (req, res, next) => {
   const firstName = req.body.firstName; // MODIFIED / ADDED
@@ -31,7 +31,7 @@ exports.postSignup = (req, res, next) => {
       return user.save();
     })
     .then((result) => {
-      res.status(201).json({ message: "User Added Successfully." }); // MODIFIED / ADDED
+      res.status(201).json({ message: 'User Added Successfully.' }); // MODIFIED / ADDED
     })
     .catch((err) => {
       const error = new Error(err);
@@ -40,3 +40,30 @@ exports.postSignup = (req, res, next) => {
     });
 };
 
+exports.postLogin = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  User
+    .findOne({ email: email })
+    .then((user) => {
+      if (user) {
+        bcrypt
+          .compare(password, user.password)
+          .then((result) => {
+            if (result) {
+              res.status(200).json({ message: 'Successfully Logged In', user: user });
+            } else {
+              res.status(400).json({ message: 'Invalid user information' });
+            }
+        });
+      } else {
+        res.status(401).json({ message: 'User not found' });
+      }
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
