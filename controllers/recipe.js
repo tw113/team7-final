@@ -98,27 +98,37 @@ exports.postRecipe = async (req, res, next) => {
   //Add user to recipe list
 };
 
-exports.putEditRecipe = async (req, res) => {
+exports.putEditRecipe = (req, res, next) => {
   const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
+  let imageUrl = req.body.imageUrl;
   const description = req.body.description;
-  // const { name, quantity} = req.body.ingredients;
-  const ingredients = req.body.ingredients; //MODIFIED: Ingredients is now a String instead of list of objects
+  const ingredients = req.body.ingredients;
   const instructions = req.body.instructions;
 
-  const recipe = new Recipe({
-    title: title,
-    description: description,
-    imageUrl: imageUrl,
-    userId: mongoose.Types.ObjectId("62316881efcc971eb862e952"), //MODIFIED : temporarily hardcoded
-    // ingredients: {
-    //   name: name,
-    //   quantity: quantity,
-    // },
-    ingredients: ingredients, //MODIFIED: Ingredients is now a String instead of list of objects
-    instructions: instructions,
-  });
+  Recipe
+    .findOne({ title: title })
+    .then((recipe) => {
+      if (recipe) {
+        bcrypt
+          .compare(title, recipe.title)
+          .then((result) => {
+            if (result) {
+              res.status(200).json({ message: 'Recipe Successfully Added', recipe: recipe });
+            } else {
+              res.status(400).json({ message: 'Recipe could not be added' });
+            }
+        });
+      } else {
+        res.status(401).json({ message: 'Recipe not found' });
+      }
+    })
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
+
 
 //Deletes a recipe
 exports.deleteRecipe = (req, res, next) => {
