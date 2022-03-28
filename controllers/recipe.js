@@ -55,7 +55,7 @@ exports.postRecipe = async (req, res, next) => {
   const instructions = req.body.instructions;
 
   //Get user so added recipeId can also be added to logged in user recipe list
-  const user = await User.findById(userId);
+  const user = await User.findById(req.userId);
   if (!user) {
     const error = new Error("User not found.");
     error.statusCode(404);

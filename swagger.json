@@ -102,7 +102,7 @@
             "in": "body",
             "description": "Recipe that we want to create",
             "schema": {
-              "$ref": "#definitions/Recipe"
+              "$ref": "#definitions/RecipeUpdate"
             }
           }
         ],
@@ -221,6 +221,14 @@
       "$ref": "#definitions/Recipe"
     },
     "RecipeUpdate": {
+      "required": [
+        "title",
+        "userId",
+        "description",
+        "imageUrl",
+        "ingredients",
+        "instructions"
+      ],
       "properties": {
         "title": {
           "type": "string"
