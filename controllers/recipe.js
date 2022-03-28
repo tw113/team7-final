@@ -1,6 +1,5 @@
 // Controller for Recipes
 const mongoose = require("mongoose");
-//module.exports = router;
 
 // const validationResult = require("express-validator/check"); // MODIFIED - commented out -> not using yet
 
@@ -47,18 +46,13 @@ exports.getRecipe = (req, res, next) => {
     });
 };
 
-//Creates recipe
+//Creates recipe if user is logged in
 exports.postRecipe = async (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const description = req.body.description;
-  // const { name, quantity} = req.body.ingredients;
-  const ingredients = req.body.ingredients; //MODIFIED: Ingredients is now a String instead of list of objects
+  const ingredients = req.body.ingredients;
   const instructions = req.body.instructions;
-
-  const userId = /* req.userId*/ mongoose.Types.ObjectId(
-    "62316881efcc971eb862e952"
-  );
 
   //Get user so added recipeId can also be added to logged in user recipe list
   const user = await User.findById(userId);
@@ -72,9 +66,8 @@ exports.postRecipe = async (req, res, next) => {
     title: title,
     description: description,
     imageUrl: imageUrl,
-    userId: userId, //MODIFIED : temporarily hardcoded
-    ingredients: ingredients, //MODIFIED: Ingredients is now a String instead of list of objects
-
+    userId: req.userId,
+    ingredients: ingredients,
     instructions: instructions,
   });
 
@@ -105,30 +98,28 @@ exports.putEditRecipe = (req, res, next) => {
   const ingredients = req.body.ingredients;
   const instructions = req.body.instructions;
 
-  Recipe
-    .findOne({ title: title })
+  Recipe.findOne({ title: title })
     .then((recipe) => {
       if (recipe) {
-        bcrypt
-          .compare(title, recipe.title)
-          .then((result) => {
-            if (result) {
-              res.status(200).json({ message: 'Recipe Successfully Added', recipe: recipe });
-            } else {
-              res.status(400).json({ message: 'Recipe could not be added' });
-            }
+        bcrypt.compare(title, recipe.title).then((result) => {
+          if (result) {
+            res
+              .status(200)
+              .json({ message: "Recipe Successfully Added", recipe: recipe });
+          } else {
+            res.status(400).json({ message: "Recipe could not be added" });
+          }
         });
       } else {
-        res.status(401).json({ message: 'Recipe not found' });
+        res.status(401).json({ message: "Recipe not found" });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
     });
 };
-
 
 //Deletes a recipe
 exports.deleteRecipe = (req, res, next) => {

@@ -56,7 +56,7 @@ exports.postLogin = (req, res, next) => {
                 userId: user._id.toString(),
                 email: user.email,
               },
-              "somesupersecretsecret",
+              "superdupersecrettoken",
               { expiresIn: "1h" }
             );
             res.status(200).json({
