@@ -58,7 +58,7 @@ exports.postRecipe = async (req, res, next) => {
   const user = await User.findById(req.userId);
   if (!user) {
     const error = new Error("User not found.");
-    error.statusCode(404);
+    error.statusCode = 404;
     throw error;
   }
 
@@ -124,10 +124,11 @@ exports.putEditRecipe = (req, res, next) => {
 //Deletes a recipe
 exports.deleteRecipe = (req, res, next) => {
   const recipeId = req.params.recipeId;
-  Recipe.deleteOne(recipeId)
+  Recipe.findByIdAndRemove(recipeId)
     .then(() => {
       console.log("DESTROYED RECIPE");
-      res.redirect("/recipes");
+      // res.redirect("/recipes");
+      res.status(200).json({ message: "Recipe Deleted" });
     })
     .catch((err) => {
       const error = new Error(err);
