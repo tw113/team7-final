@@ -8,31 +8,40 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 exports.postSignup = (req, res, next) => {
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
+  const firstName = req.body.firstName; // MODIFIED / ADDED
+  const lastName = req.body.lastName; // MODIFIED / ADDED
   const email = req.body.email;
   const password = req.body.password;
-
-  //MODIFIED: temporarily commented out -> not yet using in route
-  // const errors = validationResult(req);
-  // if (!errors.isEmpty()) {
-  //   console.log("Successfully signed up");
-  // }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json('auth/signup', {
+      path: '/signup',
+      pageTitle: 'Signup',
+      errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword
+      },
+      validationErrors: errors.array()
+    });
+  }
 
   bcrypt
     .hash(password, 12)
     .then((hashedPassword) => {
       const user = new User({
-        firstName: firstName,
-        lastName: lastName,
+        firstName: firstName, // MODIFIED / ADDED
+        lastName: lastName, // MODIFIED / ADDED
         email: email,
         password: hashedPassword,
-        recipes: [],
+        recipes: [], // MODIFIED cart: { items: [] }, to recipes: []
       });
       return user.save();
     })
     .then((result) => {
-      res.status(201).json({ message: "User Added Successfully." }); // MODIFIED / ADDED
+      res.status(201).json({ message: 'User Added Successfully.' }); // MODIFIED / ADDED
     })
     .catch((err) => {
       const error = new Error(err);
