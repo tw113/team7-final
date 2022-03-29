@@ -141,8 +141,7 @@ exports.deleteRecipe = (req, res, next) => {
         return recipe.recipeId.toString() !== recipeId.toString();
       });
       user.recipes = updatedUserRecipes;
-      
-      res.status(200).json({ message: "Recipe Deleted from User List" });
+      console.log("RECIPE REMOVED FROM LIST");
       return user.save();
     })
     .catch((err) => {
