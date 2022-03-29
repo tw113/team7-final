@@ -15,17 +15,23 @@ exports.postSignup = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors.array());
-    return res.status(422).json('auth/signup', {
-      path: '/signup',
-      pageTitle: 'Signup',
+    return res.status(422).json("auth/signup", {
+      path: "/signup",
+      pageTitle: "Signup",
       errorMessage: errors.array()[0].msg,
       oldInput: {
         email: email,
         password: password,
-        confirmPassword: req.body.confirmPassword
+        confirmPassword: req.body.confirmPassword,
       },
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
+    /*Since our code is not returning a view but a json object
+     you may want to return something more like this: /*
+    // return res.status(422).json({
+    //   errorMessage: errors.array()[0].errorMessage,
+    //   validationErrors: errors.array(),
+    // });
   }
 
   bcrypt
@@ -41,7 +47,7 @@ exports.postSignup = (req, res, next) => {
       return user.save();
     })
     .then((result) => {
-      res.status(201).json({ message: 'User Added Successfully.' });
+      res.status(201).json({ message: "User Added Successfully." });
     })
     .catch((err) => {
       const error = new Error(err);
