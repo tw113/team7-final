@@ -131,13 +131,28 @@ exports.putEditRecipe = (req, res, next) => {
     });
 };
 
-//Deletes a recipe
+//Deletes a recipe as well as the recipe in the logged-in users list.
 exports.deleteRecipe = (req, res, next) => {
   const recipeId = req.params.recipeId;
+  const userId = "62316881efcc971eb862e952";   //req.userId;
+  User.findById(userId)
+    .then((user) => {
+      const updatedUserRecipes = user.recipes.filter(recipe => {
+        return recipe.recipeId.toString() !== recipeId.toString();
+      });
+      user.recipes = updatedUserRecipes;
+      
+      res.status(200).json({ message: "Recipe Deleted from User List" });
+      return user.save();
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
   Recipe.findByIdAndRemove(recipeId)
     .then(() => {
       console.log("DESTROYED RECIPE");
-      // res.redirect("/recipes");
       res.status(200).json({ message: "Recipe Deleted" });
     })
     .catch((err) => {
