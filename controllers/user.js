@@ -3,13 +3,13 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// const validationResult = require("express-validator"); //
+const { validationResult } = require("express-validator");
 
 const User = require("../models/user");
 
 exports.postSignup = (req, res, next) => {
-  const firstName = req.body.firstName; // MODIFIED / ADDED
-  const lastName = req.body.lastName; // MODIFIED / ADDED
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const email = req.body.email;
   const password = req.body.password;
   const errors = validationResult(req);
@@ -32,16 +32,16 @@ exports.postSignup = (req, res, next) => {
     .hash(password, 12)
     .then((hashedPassword) => {
       const user = new User({
-        firstName: firstName, // MODIFIED / ADDED
-        lastName: lastName, // MODIFIED / ADDED
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         password: hashedPassword,
-        recipes: [], // MODIFIED cart: { items: [] }, to recipes: []
+        recipes: [],
       });
       return user.save();
     })
     .then((result) => {
-      res.status(201).json({ message: 'User Added Successfully.' }); // MODIFIED / ADDED
+      res.status(201).json({ message: 'User Added Successfully.' });
     })
     .catch((err) => {
       const error = new Error(err);
