@@ -92,11 +92,21 @@ exports.postRecipe = async (req, res, next) => {
 };
 
 exports.putEditRecipe = (req, res, next) => {
+  //TODO: get the recipe id using req.params.recipeId and save it in a const
+
   const title = req.body.title;
   let imageUrl = req.body.imageUrl;
   const description = req.body.description;
   const ingredients = req.body.ingredients;
   const instructions = req.body.instructions;
+
+  //TODO: Find recipe by id in Recipe database
+
+  //TODO: Provide error message if a recipe by that id cannot be found
+
+  //TODO: Replace old values for the recipe title, imageUrl, description, ingredients, & instructions with new values
+
+  //TODO: Save the updated recipe
 
   Recipe.findOne({ title: title })
     .then((recipe) => {
@@ -121,13 +131,27 @@ exports.putEditRecipe = (req, res, next) => {
     });
 };
 
-//Deletes a recipe
+//Deletes a recipe as well as the recipe in the logged-in users list.
 exports.deleteRecipe = (req, res, next) => {
   const recipeId = req.params.recipeId;
+  const userId = "62316881efcc971eb862e952";   //req.userId;
+  User.findById(userId)
+    .then((user) => {
+      const updatedUserRecipes = user.recipes.filter(recipe => {
+        return recipe.recipeId.toString() !== recipeId.toString();
+      });
+      user.recipes = updatedUserRecipes;
+      console.log("RECIPE REMOVED FROM LIST");
+      return user.save();
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
   Recipe.findByIdAndRemove(recipeId)
     .then(() => {
       console.log("DESTROYED RECIPE");
-      // res.redirect("/recipes");
       res.status(200).json({ message: "Recipe Deleted" });
     })
     .catch((err) => {
