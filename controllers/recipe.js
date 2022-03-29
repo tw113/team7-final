@@ -91,45 +91,52 @@ exports.postRecipe = async (req, res, next) => {
   //Add user to recipe list
 };
 
-exports.putEditRecipe = (req, res, next) => {
-  //TODO: get the recipe id using req.params.recipeId and save it in a const
-
-  const title = req.body.title;
-  let imageUrl = req.body.imageUrl;
-  const description = req.body.description;
-  const ingredients = req.body.ingredients;
-  const instructions = req.body.instructions;
-
-  //TODO: Find recipe by id in Recipe database
-
-  //TODO: Provide error message if a recipe by that id cannot be found
-
-  //TODO: Replace old values for the recipe title, imageUrl, description, ingredients, & instructions with new values
-
-  //TODO: Save the updated recipe
-
-  Recipe.findOne({ title: title })
-    .then((recipe) => {
-      if (recipe) {
-        bcrypt.compare(title, recipe.title).then((result) => {
-          if (result) {
-            res
-              .status(200)
-              .json({ message: "Recipe Successfully Added", recipe: recipe });
-          } else {
-            res.status(400).json({ message: "Recipe could not be added" });
-          }
+ exports.putEditRecipe = (req, res, next) => {
+    const recipeId = req.params.recipeId;
+    Recipe.findById(recipeId)
+      .then((recipe) => {
+        if (!recipe) {
+          const error = new Error("Could not find recipe");
+          error.statusCode = 404;
+          throw error;
+        }
+        res.status(200).json({
+          message: "Recipe fetched",
+          recipe: recipe,
         });
-      } else {
-        res.status(401).json({ message: "Recipe not found" });
-      }
-    })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
-};
+      })
+      .catch((err) => {
+        if (!err.statusCode) {
+          err.statusCode = 500;
+        }
+        next(err);
+
+        const recipe = new Recipe({
+          title: title,
+          description: description,
+          imageUrl: imageUrl,
+          userId: req.userId,
+          ingredients: ingredients,
+          instructions: instructions,
+        });
+      
+        recipe
+          .save()
+          .then((result) => {
+            console.log("Created Recipe");
+            res.status(201).json({ message: "Recipe Added Successfully" });
+            user.recipes.push({ recipeId: result._id });
+            return user.save();
+          })
+          .then((result) => {
+            console.log("Added recipe to User recipe list");
+          })
+          .catch((err) => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+          });
+  });
 
 //Deletes a recipe as well as the recipe in the logged-in users list.
 exports.deleteRecipe = (req, res, next) => {
@@ -159,4 +166,5 @@ exports.deleteRecipe = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     });
+  };
 };
