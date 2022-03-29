@@ -1,7 +1,8 @@
 {
-    "env": {
-        "MONGO_USER": "Cookbook",
-        "MONGO_PASSWORD": "TEAM7CSE341",
-        "MONGO_DATABASE": "CookBookCluster"
-    }
+  "env": {
+    "MONGO_USER": "Cookbook",
+    "MONGO_PASSWORD": "TEAM7CSE341",
+    "MONGO_DATABASE": "CookBookCluster",
+    "JWT_SECRET": "superdupersecrettoken"
+  }
 }

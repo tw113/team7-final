@@ -17,7 +17,7 @@ exports.postSignup = (req, res, next) => {
     console.log(errors.array());
     return res.status(422).json({
       errorMessage: errors.array()[0].errorMessage,
-      validationErrors: errors.array()
+      validationErrors: errors.array(),
     });
   }
 
@@ -58,7 +58,7 @@ exports.postLogin = (req, res, next) => {
                 userId: user._id.toString(),
                 email: user.email,
               },
-              "superdupersecrettoken",
+              process.env.JWT_SECRET,
               { expiresIn: "1h" }
             );
             res.status(200).json({
