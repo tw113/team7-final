@@ -11,7 +11,7 @@
     "bearerAuth": {
       "description": "Enter your token in the format <b>Bearer</b> + <b>token</b>",
       "type": "apiKey",
-      "name": "jwt-auth-token",
+      "name": "Authorization",
       "scheme": "bearer",
       "bearerFormat": "JWT",
       "in": "header"
