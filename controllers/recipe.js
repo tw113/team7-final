@@ -91,60 +91,49 @@ exports.postRecipe = async (req, res, next) => {
   //Add user to recipe list
 };
 
- exports.putEditRecipe = (req, res, next) => {
-    const recipeId = req.params.recipeId;
-    Recipe.findById(recipeId)
-      .then((recipe) => {
-        if (!recipe) {
-          const error = new Error("Could not find recipe");
-          error.statusCode = 404;
-          throw error;
-        }
-        res.status(200).json({
-          message: "Recipe fetched",
-          recipe: recipe,
-        });
-      })
-      .catch((err) => {
-        if (!err.statusCode) {
-          err.statusCode = 500;
-        }
-        next(err);
+exports.putEditRecipe = (req, res, next) => {
+  const recipeId = req.params.recipeId;
+  const updatedTitle = req.body.title;
+  const updatedDescription = req.body.description;
+  const updatedImageUrl = req.body.imageUrl;
+  const updatedIngredients = req.body.ingredients;
+  const updatedInstructions = req.body.instructions;
 
-        const recipe = new Recipe({
-          title: title,
-          description: description,
-          imageUrl: imageUrl,
-          userId: req.userId,
-          ingredients: ingredients,
-          instructions: instructions,
-        });
-      
-        recipe
-          .save()
-          .then((result) => {
-            console.log("Created Recipe");
-            res.status(201).json({ message: "Recipe Added Successfully" });
-            user.recipes.push({ recipeId: result._id });
-            return user.save();
-          })
-          .then((result) => {
-            console.log("Added recipe to User recipe list");
-          })
-          .catch((err) => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
-          });
-  });
+  Recipe.findById(recipeId)
+    .then((recipe) => {
+      if (!recipe) {
+        const error = new Error("Could not find recipe");
+        error.statusCode = 404;
+        throw error;
+      }
+      recipe.title = updatedTitle;
+      recipe.description = updatedDescription;
+      recipe.imageUrl = updatedImageUrl;
+      recipe.ingredients = updatedIngredients;
+      recipe.instructions = updatedInstructions;
+      return recipe.save();
+    })
+    .then((updatedUser) => {
+      console.log("Updated Recipe");
+      res.status(200).json({
+        message: "Recipe Updated Successfully",
+        updatedUser: updatedUser,
+      });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+};
 
 //Deletes a recipe as well as the recipe in the logged-in users list.
 exports.deleteRecipe = (req, res, next) => {
   const recipeId = req.params.recipeId;
-  const userId = "62316881efcc971eb862e952";   //req.userId;
+  const userId = "62316881efcc971eb862e952"; //req.userId;
   User.findById(userId)
     .then((user) => {
-      const updatedUserRecipes = user.recipes.filter(recipe => {
+      const updatedUserRecipes = user.recipes.filter((recipe) => {
         return recipe.recipeId.toString() !== recipeId.toString();
       });
       user.recipes = updatedUserRecipes;
@@ -166,5 +155,4 @@ exports.deleteRecipe = (req, res, next) => {
       error.httpStatusCode = 500;
       return next(error);
     });
-  };
 };
