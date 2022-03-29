@@ -9,7 +9,7 @@
   "basePath": "/",
   "securityDefinitions": {
     "bearerAuth": {
-      "description": "Enter your token in the format Bearer [ token ]",
+      "description": "Enter your token in the format <b>Bearer</b> + <b>token</b>",
       "type": "apiKey",
       "name": "jwt-auth-token",
       "scheme": "bearer",
