@@ -8,9 +8,9 @@ const mongoose = require("mongoose");
 const app = express();
 
 const recipeRoutes = require("./routes/recipe");
-const userRoutes = require("./routes/user"); // MODIFIED / ADDED
+const userRoutes = require("./routes/user");
 
-app.use(bodyParser.json()); // application/json content
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -23,8 +23,12 @@ app.get("/", (res, req, next) => {
   req.json({ test: "test" });
 });
 
-app.use(userRoutes); // MODIFIED / ADDED
+app.use(userRoutes);
 app.use(recipeRoutes);
+
+app.use((error, req, res, next) => {
+  res.status(500).json({ message: error.message });
+});
 
 mongoose
   .connect(
