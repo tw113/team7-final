@@ -27,7 +27,7 @@ exports.postSignup = (req, res, next) => {
       validationErrors: errors.array(),
     });
     /*Since our code is not returning a view but a json object
-     you may want to return something more like this: /*
+     you may want to return something more like this: */
     // return res.status(422).json({
     //   errorMessage: errors.array()[0].errorMessage,
     //   validationErrors: errors.array(),
