@@ -11,17 +11,13 @@
     "bearerAuth": {
       "description": "Enter your token in the format Bearer [ token ]",
       "type": "apiKey",
-      "name": "x-auth-token",
+      "name": "jwt-auth-token",
       "scheme": "bearer",
+      "bearerFormat": "JWT",
       "in": "header"
     }
   },
   "schemes": ["http"],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
@@ -103,6 +99,11 @@
     },
     "/recipe": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": ["Recipes"],
         "summary": "Add new recipe to the Recipe database",
         "parameters": [
@@ -149,6 +150,11 @@
         }
       },
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Use recipe id to update recipe in User database",
         "tags": ["Recipes"],
         "parameters": [
@@ -174,6 +180,11 @@
         }
       },
       "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Delete recipe by ID from Recipe database and from user's recipe list in the User database",
         "tags": ["Recipes"],
         "produces": ["application/json"],
