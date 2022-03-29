@@ -7,10 +7,19 @@
   },
   "host": "localhost:8080",
   "basePath": "/",
+  "securityDefinitions": {
+    "bearerAuth": {
+      "description": "Enter your token in the format Bearer [ token ]",
+      "type": "apiKey",
+      "name": "x-auth-token",
+      "scheme": "bearer",
+      "in": "header"
+    }
+  },
   "schemes": ["http"],
   "security": [
     {
-      "application": ["read", "write"]
+      "bearerAuth": []
     }
   ],
   "consumes": ["application/json"],
@@ -293,17 +302,6 @@
         "password": {
           "type": "string"
         }
-      }
-    }
-  },
-  "securityDefinitions": {
-    "application": {
-      "type": "oauth2",
-      "tokenUrl": "http://example.com/oauth/token",
-      "flow": "application",
-      "scopes": {
-        "write": "allows modifying resources",
-        "read": "allows reading resources"
       }
     }
   }
