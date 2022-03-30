@@ -268,7 +268,13 @@
       }
     },
     "NewUser": {
-      "required": ["firstName", "lastName", "email", "password"],
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "password",
+        "confirmPassword"
+      ],
       "properties": {
         "firstName": {
           "type": "string"
@@ -280,6 +286,9 @@
           "type": "string"
         },
         "password": {
+          "type": "string"
+        },
+        "confirmPassword": {
           "type": "string"
         }
       }
