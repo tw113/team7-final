@@ -84,7 +84,11 @@ exports.postRecipe = async (req, res, next) => {
     .save()
     .then((result) => {
       console.log("Created Recipe");
-      res.status(201).json({ message: "Recipe Added Successfully" });
+      res.status(201).json({
+        message: "Recipe Added Successfully",
+        recipeId: result._id,
+        newRecipe: result,
+      });
       user.recipes.push({ recipeId: result._id });
       return user.save();
     })
@@ -123,6 +127,11 @@ exports.putEditRecipe = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
+      if (recipe.userId.toString() !== req.userId) {
+        return res.status(403).json({
+          message: "Not Authorized to edit this recipe",
+        });
+      }
       recipe.title = updatedTitle;
       recipe.description = updatedDescription;
       recipe.imageUrl = updatedImageUrl;
@@ -130,11 +139,12 @@ exports.putEditRecipe = (req, res, next) => {
       recipe.instructions = updatedInstructions;
       return recipe.save();
     })
-    .then((updatedUser) => {
+    .then((updatedRecipe) => {
       console.log("Updated Recipe");
       res.status(200).json({
         message: "Recipe Updated Successfully",
-        updatedUser: updatedUser,
+        recipeId: updatedRecipe._id,
+        updatedRecipe: updatedRecipe,
       });
     })
     .catch((err) => {
@@ -147,7 +157,21 @@ exports.putEditRecipe = (req, res, next) => {
 //Deletes a recipe as well as the recipe in the logged-in users list.
 exports.deleteRecipe = (req, res, next) => {
   const recipeId = req.params.recipeId;
-  const userId = "62316881efcc971eb862e952"; //req.userId;
+  const userId = req.userId;
+  Recipe.findById(recipeId)
+    .then((recipe) => {
+      if (recipe.userId.toString() !== req.userId) {
+        return res.status(403).json({
+          message: "Not Authorized to delete this recipe",
+        });
+      }
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
+
   User.findById(userId)
     .then((user) => {
       const updatedUserRecipes = user.recipes.filter((recipe) => {
@@ -157,13 +181,10 @@ exports.deleteRecipe = (req, res, next) => {
       console.log("RECIPE REMOVED FROM LIST");
       return user.save();
     })
-    .catch((err) => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
-  Recipe.findByIdAndRemove(recipeId)
-    .then(() => {
+    .then((result) => {
+      return Recipe.findByIdAndRemove(recipeId);
+    })
+    .then((result) => {
       console.log("DESTROYED RECIPE");
       res.status(200).json({ message: "Recipe Deleted" });
     })
