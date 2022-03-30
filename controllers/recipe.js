@@ -1,7 +1,7 @@
 // Controller for Recipes
 const mongoose = require("mongoose");
 
-// const validationResult = require("express-validator/check"); // MODIFIED - commented out -> not using yet
+const { validationResult } = require("express-validator");
 
 const Recipe = require("../models/recipe");
 const User = require("../models/user");
@@ -54,6 +54,15 @@ exports.postRecipe = async (req, res, next) => {
   const ingredients = req.body.ingredients;
   const instructions = req.body.instructions;
 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json({
+      errorMessage: errors.array()[0].errorMessage,
+      validationErrors: errors.array(),
+    });
+  }
+
   //Get user so added recipeId can also be added to logged in user recipe list
   const user = await User.findById(req.userId);
   if (!user) {
@@ -99,6 +108,14 @@ exports.putEditRecipe = (req, res, next) => {
   const updatedIngredients = req.body.ingredients;
   const updatedInstructions = req.body.instructions;
 
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.log(errors.array());
+    return res.status(422).json({
+      errorMessage: errors.array()[0].errorMessage,
+      validationErrors: errors.array(),
+    });
+  }
   Recipe.findById(recipeId)
     .then((recipe) => {
       if (!recipe) {
